@@ -1,4 +1,4 @@
-                                             Origo JSON-RPC methods
+                                             Origo Private Transaction JSON-RPC APIs
 
 
 
@@ -13,10 +13,10 @@ Sends transaction and signs it in a single call. The account does not need to be
 
 
 
-*    from: Address - 20 Bytes - The address the transaction is send from.
+*   from: Address - 20 Bytes - The address the transaction is send from.
 *   to: Address - (optional) 20 Bytes - The address the transaction is directed to.
 *   gas: Quantity - (optional) Integer of the gas provided for the transaction execution.
-*    gasPrice: Quantity - (optional) Integer of the gas price used for each paid gas.
+*   gasPrice: Quantity - (optional) Integer of the gas price used for each paid gas.
 *   value: Quantity - (optional) Integer of the value sent with this transaction.
 *   data: Data - (optional) 4 byte hash of the method signature followed by encoded parameters. For details see Ethereum Contract ABI.
 *   nonce: Quantity - (optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
@@ -24,7 +24,7 @@ Sends transaction and signs it in a single call. The account does not need to be
 *   shield_amouts: List – shield amount info in shield transaction
     *   address: ZAddress – shiled address the transaction is directed to
     *   amount: Quantity – the numeric amount to the address
-    *    memo: String – (optional) raw data represented in hexadecimal string
+    *   memo: String – (optional) raw data represented in hexadecimal string
 
 2.     String - Passphrase to unlock the from account
 
@@ -34,7 +34,7 @@ Sends transaction and signs it in a single call. The account does not need to be
 ```
 Params: [
 {
-     "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72",
+    "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72",
     "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
     "gas": "0x76c0",
     "gasPrice": "0x9184e72a000",
@@ -45,7 +45,7 @@ Params: [
         "amount": 32,
         "memo":"test"
         }
-]
+    ]
  },
 "password123"
 ]
