@@ -11,7 +11,7 @@ Perform the following steps to submit a private transaction to the full node on 
 
 
 1. **Setup the Origo blockchain testnet**
-2. **Create the public address for user A**
+2. **Verify the public address for user A**
 3. **Create the private address for user A and user B**
 4. **Submit shield transaction from A’s public address to A’s private address**
 5. **Submit private transaction from A’s private address to B’s private address**
@@ -32,21 +32,19 @@ To start the testnet,  change to the binary directory and run the command as bel
 ```
 
 
-**Create the public address for user A**
+**Verify the public address for user A**
 
-To create A’s public address with password as **password123** using JSON-RPC, enter this command:
+In the develop mode we have a preloaded public address **0x00a329c0648769a73afac7f9381e08fb43dbea72** holds enough origo for testing. Its password is empty string. We run the unlock command to verify we have access to it:
+
+```
+curl --data '{"method":"personal_unlockAccount","params":["0x00a329c0648769a73afac7f9381e08fb43dbea72","",null],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+```
+
+It should return a success result like this:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"personal_newAccount","params":["password123"],"id":1}'  -H "Content-Type: application/json"  -X POST localhost:8545
-```
-
-
-Sample output on success:
-
-
-```
-{"jsonrpc":"2.0","result":"0x07d88c56b1e3db39285bbcd64df9efa6593354c5","id":1}
+{"jsonrpc":"2.0","result":true,"id":1}
 ```
 
 
@@ -62,7 +60,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Conten
 ```
 
 
- Sample output on success:
+Sample output on success:
 
 
 ```
@@ -116,10 +114,10 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Conten
 
 To send balance from A’s public address to A’s private address, the command as below:
 
-_Note: Please **replace these addresses** in below command accordingly_
+_Note: Please **replace the address ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6** to A’s private address.
 
 ```
-curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x07d88c56b1e3db39285bbcd64df9efa6593354c5","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x20", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": 32, "memo":"test" }] }, "password123"] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x20", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": 32, "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 
@@ -127,7 +125,7 @@ curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x07
 
 
 ```
-{"jsonrpc":"2.0","result":"0x5dfe2d91127e1110976247c3983c1bd6b56ab3c45d34f0a81e571367b50ac967","id":1}
+{"jsonrpc":"2.0","result":"0x6cbdaf0c766c3cafe3553c4687a0c1bb3579d40cbe016806d5225e7ed6c6bcfd","id":1}
 ```
 
 
