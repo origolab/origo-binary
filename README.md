@@ -9,7 +9,7 @@ Here is the list of supported OS we have tested these binaries:
 | :------------| :--------: |
 | Ubuntu 18.04 | Yes        |
 | macOS Mojave | Yes        |
-| Windows 10   | _TODO_     |
+| Windows 10   | Yes        |
 
 ## Tutorials
 We will publish a series of tutorials in this repo to help you understand the basic features of Medietas, please follow them to play around.
@@ -17,8 +17,11 @@ We will publish a series of tutorials in this repo to help you understand the ba
 ### Private Transaction Tutorial
 Please follow [private transaction tutorial](docs/pt_tutorial.md)
 
+### CPU Mining Tutorial
+Please follow [cpu mining tutorial](docs/cpu_mining_tutorial.md)
+
 ## Issues
 Please submit any issue, bugs or feature requests via [here](https://github.com/origolab/origo-binary/issues/new).
 
 ## Current Version
-**0.1.0-alpha July 17th 2019**
+**0.2.0-alpha Sep 17th 2019**
