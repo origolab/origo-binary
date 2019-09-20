@@ -175,7 +175,7 @@ To submit the private transaction from A’s private address to B’s private ad
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":10, "memo":"test" }], 5, 12],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":10, "memo":"test" }]],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
 ```
 
 
