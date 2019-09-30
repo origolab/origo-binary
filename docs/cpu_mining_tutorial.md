@@ -6,7 +6,7 @@ We choose [EquiHash](https://en.wikipedia.org/wiki/Equihash) as our PoW algorith
 
 ### Stratum
 
-Miner client connects to Origo node by [Stratum Protocol](https://en.bitcoinwiki.org/wiki/Stratum_mining_protocol).  Default ip:port binding is `0.0.0.0:8008`. There are two major messages `subscribe` and `submit` for client to mine with node.
+Miner client connects to Origo node by [Stratum Protocol](https://en.bitcoinwiki.org/wiki/Stratum_mining_protocol).  Default ip:port binding is `0.0.0.0:6002`. There are two major messages `subscribe` and `submit` for client to mine with node.
 
 #### Subscribe
 
@@ -106,8 +106,8 @@ python server.py
 
 If everything is correctly configured, you will see these logs:
 ```
-DEBUG:stratum-client:connecting to 127.0.0.1:8008...
-INFO:stratum-client:connected to 127.0.0.1:8008
+DEBUG:stratum-client:connecting to 127.0.0.1:6002...
+INFO:stratum-client:connected to 127.0.0.1:6002
 DEBUG:stratum-client:mining.subscribe(()) took 0.572919845581ms
 Miner starting
 Nonce: 0

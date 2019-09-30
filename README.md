@@ -21,7 +21,7 @@ Please follow [private transaction tutorial](docs/pt_tutorial.md)
 Please follow [cpu mining tutorial](docs/cpu_mining_tutorial.md)
 
 ### GPU Mining Tutorial
-Please follow [cpu mining tutorial](docs/gpu_mining_tutorial.md)
+Please follow [gpu mining tutorial](docs/gpu_mining_tutorial.md)
 
 ## Issues
 Please submit any issue, bugs or feature requests via [here](https://github.com/origolab/origo-binary/issues/new).

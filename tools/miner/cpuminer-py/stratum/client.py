@@ -12,7 +12,7 @@ CLIENT_VERSION = "0.0"
 PROTO_VERSION = "1.0"
 
 DEFAULT_HOST = '127.0.0.1'
-DEFAULT_PORT = 8008
+DEFAULT_PORT = 6002
 
 TIMEOUT = 5
 
@@ -281,4 +281,4 @@ if __name__ == "__main__":
     conn = Connection(1)
     result = conn.call("mining.subscribe")["result"]
     print("result ", result)
-    
+
