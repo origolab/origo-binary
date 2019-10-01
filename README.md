@@ -20,8 +20,11 @@ Please follow [private transaction tutorial](docs/pt_tutorial.md)
 ### CPU Mining Tutorial
 Please follow [cpu mining tutorial](docs/cpu_mining_tutorial.md)
 
+### GPU Mining Tutorial
+Please follow [gpu mining tutorial](docs/gpu_mining_tutorial.md)
+
 ## Issues
 Please submit any issue, bugs or feature requests via [here](https://github.com/origolab/origo-binary/issues/new).
 
 ## Current Version
-**0.2.0-alpha Sep 17th 2019**
+**0.2.5-beta Sep 30th 2019**

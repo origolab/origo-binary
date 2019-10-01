@@ -22,13 +22,13 @@ Perform the following steps to submit a private transaction to the full node on 
 
 Download the Origo Blockchain Binary from [releases](https://github.com/origolab/origo-binary/releases), please choose right version for your operating system.
 
-**Step 2: Start Origo testnet**
+**Step 2: Connecting to Medietas testnet**
 
 To start the testnet,  change to the binary directory and run the command as below:
 
 
 ```
-./origo --chain=dev --jsonrpc-apis=all
+./origo --chain=medietas-testnet --jsonrpc-apis=all
 ```
 
 
@@ -37,7 +37,7 @@ To start the testnet,  change to the binary directory and run the command as bel
 In the develop mode we have a preloaded public address **0x00a329c0648769a73afac7f9381e08fb43dbea72** holds enough origo for testing. Its password is empty string. We run the unlock command to verify we have access to it:
 
 ```
-curl --data '{"method":"personal_unlockAccount","params":["0x00a329c0648769a73afac7f9381e08fb43dbea72","",null],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"personal_unlockAccount","params":["0x00a329c0648769a73afac7f9381e08fb43dbea72","",null],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 It should return a success result like this:
@@ -56,7 +56,7 @@ To create A’s private address, using the origo_getNewAddress shown in [JSON-RP
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -76,7 +76,7 @@ To create B’s private address, repeat the command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -96,7 +96,7 @@ To list all the private addresses you have created, enter this command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -117,7 +117,7 @@ To send balance from A’s public address to A’s private address, the command 
 _Note: Please **replace the address ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6** to A’s private address.
 
 ```
-curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x20", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": 32, "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x20", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": 32, "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -135,7 +135,7 @@ To show the unspent transaction for A’s address, the command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6"],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -153,7 +153,7 @@ To show the balance for A’s private address, the command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6"],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -175,7 +175,7 @@ To submit the private transaction from A’s private address to B’s private ad
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":10, "memo":"test" }]],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":10, "memo":"test" }]],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -193,7 +193,7 @@ To show the unspent transaction for B’s address, the command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel"],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -211,7 +211,7 @@ To show the balance for B’s private address, the command:
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel"],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 

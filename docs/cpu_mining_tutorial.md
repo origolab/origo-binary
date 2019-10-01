@@ -6,7 +6,7 @@ We choose [EquiHash](https://en.wikipedia.org/wiki/Equihash) as our PoW algorith
 
 ### Stratum
 
-Miner client connects to Origo node by [Stratum Protocol](https://en.bitcoinwiki.org/wiki/Stratum_mining_protocol).  Default ip:port binding is `0.0.0.0:8008`. There are two major messages `subscribe` and `submit` for client to mine with node.
+Miner client connects to Origo node by [Stratum Protocol](https://en.bitcoinwiki.org/wiki/Stratum_mining_protocol).  Default ip:port binding is `0.0.0.0:6002`. There are two major messages `subscribe` and `submit` for client to mine with node.
 
 #### Subscribe
 
@@ -67,58 +67,18 @@ Download the Origo Blockchain Binary from [releases](https://github.com/origolab
 To start the testnet, save below content as `config_miner.toml`:
 
 ```
-# This config should be placed in following path:
-
-[parity]
-# Chain
-chain = "medietas"
-# Blockchain and settings
-base_path = "../origo"
-# Databases path
-db_path = "../origo/chains"
-
-[network]
-# P2P port.
-port = 30323
-# Min peers.
-min_peers = 2
-# Network ID
-id = 27
-# Enable or disable new peers discovery.
-discovery = true
-# Specify a path to a file with peers' enodes to be always connected to.
-#reserved_peers = "peers.toml"
-
 [mining]
-# Account address to receive reward when block is mined.
-author = "0x7364874994b0b180f3165454f8ea85fde38c611f"
-# Prepare a block to seal even when there are no miners connected.
+# Change this address to your own mining wallet address
+author = "0x7a93b005d71d402ff5b88f812e0e04db7e2fb2f4"
 force_sealing = true
-# New pending block will be created for all transactions (both local and external).
 reseal_on_txs = "all"
-# New pending block will be created only once per 4000 milliseconds.
 reseal_min_period = 4000
-# Most transactions in queue.
-tx_queue_size = 2048
-
-[footprint]
-cache_size = 256
+reseal_max_period = 60000
+tx_queue_size = 8192
 
 [stratum]
 # Enable stratum
 disable = false
-
-[rpc]
-# JSON-RPC over HTTP will be accessible on port 9023.
-port = 9023
-#  JSON-RPC will be listening for connections on IP 0.0.0.0.
-interface = "0.0.0.0"
-# Allows Cross-Origin Requests from domain 'all'.
-cors = ["all"]
-
-[websockets]
-# UI won't work and WebSockets server will be not available.
-disable = true
 
 ```
 
@@ -146,8 +106,8 @@ python server.py
 
 If everything is correctly configured, you will see these logs:
 ```
-DEBUG:stratum-client:connecting to 127.0.0.1:8008...
-INFO:stratum-client:connected to 127.0.0.1:8008
+DEBUG:stratum-client:connecting to 127.0.0.1:6002...
+INFO:stratum-client:connected to 127.0.0.1:6002
 DEBUG:stratum-client:mining.subscribe(()) took 0.572919845581ms
 Miner starting
 Nonce: 0

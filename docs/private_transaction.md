@@ -66,7 +66,7 @@ Params: [
 
 
 ```
-curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "shieldAmounts": [{"address":"ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", "amount": 32, "memo":"test" }] }, "password123"] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "shieldAmounts": [{"address":"ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", "amount": 32, "memo":"test" }] }, "password123"] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -108,7 +108,7 @@ None
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -146,7 +146,7 @@ None
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -187,7 +187,7 @@ Returns the balance of a private address belonging to the node’s wallet.
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw"],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -230,7 +230,7 @@ Returns array of unspent shielded notes with between minconf and maxconf (inclus
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw",2, 5, false],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw",2, 5, false],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -276,7 +276,7 @@ Send multiple private transactions. Amounts are decimal numbers with at most 8 d
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", [{"address":"ogo1gs2uw342alp7z49xgm2a4hshj53cwnl4ml0ardxqe8ewtl3ynut2dhq6f0n2rzf7rglv7jeksxe", "amount": 32, "memo":"test" }], 5, 12],"id":1}' -H "Content-Type: application/json" -X POST localhost:8545
+curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", [{"address":"ogo1gs2uw342alp7z49xgm2a4hshj53cwnl4ml0ardxqe8ewtl3ynut2dhq6f0n2rzf7rglv7jeksxe", "amount": 32, "memo":"test" }], 5, 12],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
