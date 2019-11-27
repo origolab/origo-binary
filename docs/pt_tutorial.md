@@ -117,7 +117,7 @@ To send balance from A’s public address to A’s private address, the command 
 _Note: Please **replace the address ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6** to A’s private address.
 
 ```
-curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x100000", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": 1048576, "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
+curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x174876e800", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": "0x174876e800", "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -143,7 +143,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo180m058
 
 
 ```
-{"jsonrpc":"2.0","result":[{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount":"0x20","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"","outindex":"0x0","spendable":true,"txid":"0x5dfe…c967"}],"id":1}
+{"jsonrpc":"2.0","result":[{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount":"0x174876e800","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"","outindex":"0x0","spendable":true,"txid":"0x5dfe…c967"}],"id":1}
 ```
 
 
@@ -161,7 +161,7 @@ Sample output on success:
 
 
 ```
-{"jsonrpc":"2.0","result":"0x20","id":1}
+{"jsonrpc":"2.0","result":"0x174876e800","id":1}
 ```
 
 
@@ -175,7 +175,7 @@ To submit the private transaction from A’s private address to B’s private ad
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":10, "memo":"test" }]],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
+curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6", [{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel", "amount":"0xba43b7400", "memo":"test" }]],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -201,7 +201,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo175j7xj
 
 
 ```
-{"jsonrpc":"2.0","result":[{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel","amount":"0xa","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"","outindex":"0x0","spendable":true,"txid":"0x5dfe…c967"}],"id":1}
+{"jsonrpc":"2.0","result":[{"address":"ogo175j7xj6jgn3w0trmxzmssydmdq5rd9vxydwdqmd9t6qkykrr0y24w6xfp44knukqjweuxxa9mel","amount":"0xba43b7400","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"","outindex":"0x0","spendable":true,"txid":"0x5dfe…c967"}],"id":1}
 ```
 
 
@@ -219,7 +219,7 @@ Sample output on success:
 
 
 ```
-{"jsonrpc":"2.0","result":"0xa","id":1}
+{"jsonrpc":"2.0","result":"0xba43b7400","id":1}
 ```
 
 
