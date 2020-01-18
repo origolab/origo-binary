@@ -2,105 +2,20 @@
 
 
 
-**personal_sendShieldTransaction**
-
-Sends transaction and signs it in a single call. The account does not need to be unlocked to make this call, and will not be left unlocked after.
-
-
-#### **Parameters**
-
-1.     Object – The Shield Transaction Object
-
-
-
-*   from: Address - 20 Bytes - The address the transaction is send from.
-*   to: Address - (optional) 20 Bytes - The address the transaction is directed to.
-*   gas: Quantity - (optional) Integer of the gas provided for the transaction execution.
-*   gasPrice: Quantity - (optional) Integer of the gas price used for each paid gas.
-*   value: Quantity - (optional) Integer of the value sent with this transaction.
-*   data: Data - (optional) 4 byte hash of the method signature followed by encoded parameters. For details see Ethereum Contract ABI.
-*   nonce: Quantity - (optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
-*   condition: Object - (optional) Conditional submission of the transaction. Can be either an integer block number or UTC timestamp (in seconds) or null.
-*   shield_amouts: List – shield amount info in shield transaction
-    *   address: ZAddress – shiled address the transaction is directed to
-    *   amount: Quantity – the numeric amount to the address
-    *   memo: String – (optional) raw data represented in hexadecimal string
-
-2.     String - Passphrase to unlock the from account
-
-
-
-
-```
-Params: [
-{
-    "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72",
-    "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
-    "gas": "0x76c0",
-    "gasPrice": "0x9184e72a000",
-    "value": "0x9184e72a",
-    "shieldAmounts": [
-        {
-        "address":"ox0000000000000000000000000000000000000001",
-        "amount": 32,
-        "memo":"test"
-        }
-    ]
- },
-"password123"
-]
-```
-
-
-
-
-**Returns**
-
-
-
-1. Data - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
-
-**Example**
-
-**Request**
-
-
-```
-curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "shieldAmounts": [{"address":"ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", "amount": 32, "memo":"test" }] }, "password123"] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
-```
-
-
-**Response**
-
-
-```
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "result": "0x62e05075829655752e146a129a044ad72e95ce33e48ff48118b697e15e7b41e4"
-}
-```
-
-
-
-
----
-
-
 **origo_getNewAddress**
 
-Return a new private address for sending and receiving payments. The spending key for this zaddr will be added to the node’s wallet.
+Return a new private address for sending and receiving payments. The spending key for this address will be added to the node’s wallet.
 
 
 #### **Parameters**
 
-None
+1. password: String – The passord is used to encrypt the private address in the node's wallet.
+
 
 **Returns**
 
+1. address: String – The new private address.
 
-
-1. String - The new private address
 
 **Example**
 
@@ -108,7 +23,7 @@ None
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Content-Type: application/json" -X POST localhost:6622
+curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","params":["password"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -121,13 +36,12 @@ curl --data '{"jsonrpc":"2.0","method":"origo_getNewAddress","id":1}' -H "Conten
 
 
 
-
 ---
 
 
 **origo_listAddresses**
 
-Return all stored private addresses
+Return all private addresses in the node's wallet.
 
 
 #### **Parameters**
@@ -155,6 +69,86 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Conten
 
 ```
 {"jsonrpc":"2.0","result":["ogo1dj3lwla9h4axf8wpqkuazyuzv3m0j3pdxuvm0x36q3wgm2y0qskkkzp7anznjtpemggswkmuwe0","ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw"],"id":1}
+```
+
+
+
+
+---
+
+**personal_sendShieldTransaction**
+
+Sends transaction and signs it in a single call. The account does not need to be unlocked to make this call, and will not be left unlocked after.
+
+
+#### **Parameters**
+
+1.     Object – The Shield Transaction Object
+
+
+
+*   from: Address - 20 Bytes - The address the transaction is send from.
+*   to: Address - 20 Bytes - The address the transaction is directed to.
+*   gas: Quantity - Integer of the gas provided for the transaction execution.
+*   gasPrice: Quantity - Integer of the gas price used for each paid gas.
+*   value: Quantity - Integer of the value sent with this transaction, the value should be the multiple of 10^9.
+*   data: Data - (optional) 4 byte hash of the method signature followed by encoded parameters. For details see Ethereum Contract ABI.
+*   nonce: Quantity - (optional) Integer of a nonce. This allows to overwrite your own pending transactions that use the same nonce.
+*   condition: Object - (optional) Conditional submission of the transaction. Can be either an integer block number or UTC timestamp (in seconds) or null.
+*   shield_amouts: List – private amount info in shield transaction
+    *   address: String – private address the transaction is directed to
+    *   amount: Quantity – the numeric amount to the address
+    *   memo: String – (optional) raw data represented in hexadecimal string
+
+2.     String - Passphrase to unlock the from account
+
+
+
+
+```
+Params: [
+{
+    "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72",
+    "gas": "0x76c00", 
+    "gasPrice": "0x9184e72a000", 
+    "value": "0x174876e800", 
+    "shieldAmounts": [
+        {
+        "address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6",
+        "amount": "0x174876e800",
+        "memo":"test"
+        }
+    ]
+ },
+"password123"
+]
+```
+
+**Returns**
+
+
+
+1. Data - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
+
+**Example**
+
+**Request**
+
+
+```
+curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x174876e800", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": "0x174876e800", "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
+```
+
+
+**Response**
+
+
+```
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": "0x62e05075829655752e146a129a044ad72e95ce33e48ff48118b697e15e7b41e4"
+}
 ```
 
 
