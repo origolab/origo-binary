@@ -4,7 +4,7 @@
 
 **origo_getNewAddress**
 
-Return a new private address for sending and receiving payments. The spending key for this address will be added to the node’s wallet.
+Return a new private address for sending and receiving payments. The address will be added to the node’s wallet.
 
 
 #### **Parameters**
@@ -78,7 +78,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Conten
 
 **personal_sendShieldTransaction**
 
-Sends transaction and signs it in a single call. The account does not need to be unlocked to make this call, and will not be left unlocked after.
+Send transaction from public address to private address and signs it in a single call. The account does not need to be unlocked to make this call, and will not be left unlocked after.
 
 
 #### **Parameters**
@@ -88,7 +88,7 @@ Sends transaction and signs it in a single call. The account does not need to be
 
 
 *   from: Address - 20 Bytes - The address the transaction is send from.
-*   to: Address - 20 Bytes - The address the transaction is directed to.
+*   to: Address - 20 Bytes - (optional) The address the transaction is directed to.
 *   gas: Quantity - Integer of the gas provided for the transaction execution.
 *   gasPrice: Quantity - Integer of the gas price used for each paid gas.
 *   value: Quantity - Integer of the value sent with this transaction, the value should be the multiple of 10^9.
@@ -189,7 +189,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_getBalance","params":["ogo127hk2tm
 
 
 ```
-{"jsonrpc":"2.0","result":"0x0","id":1}
+{"jsonrpc":"2.0","result":"0x174876e800","id":1}
 ```
 
 
@@ -207,7 +207,7 @@ Returns array of unspent shielded notes with between minconf and maxconf (inclus
 
 
 
-1. addresses: - A json array of private addresses to filter on. Duplicate addresses not allowed.
+1. address: - The private address to filter on.
 2. miniconf: Quantity - (optional) default = 1, The minimum confirmations to filter
 3. maxconf: Quantity -  (optional) default = 9999999, The maximum confirmations to filter
 4. include_watch_only: bool -  (optional)  default = false, whether include watchonly addresses
@@ -215,8 +215,20 @@ Returns array of unspent shielded notes with between minconf and maxconf (inclus
 **Returns**
 
 
+1.     Object – The unspent note for the private address.
 
-1. Data - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
+
+
+*   address: String - The private address to filter on.
+*   amout: Quantity - amount of value in the note, it is multiple of 10^9.
+*   change: Bool - true if the address received the note is also in the sending addresses.
+*   confirmations: Quantity - number of confirmations, default is 0.
+*   jsindex: Quantity - joinsplit index.
+*   jsoutindex: Quantity - output index of the joinsplit.
+*   memo: String – raw data represented in hexadecimal string for this note.
+*   outindex: Quantity - output index of the transaction for this note.
+*   spendable: Bool - True if note can be spent by wallet.
+*   txid: 32 Bytes - the transaction hash include this note.
 
 **Example**
 
@@ -224,7 +236,7 @@ Returns array of unspent shielded notes with between minconf and maxconf (inclus
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw",2, 5, false],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
+curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo1td987xe2lmhez8juecmnlk4mxfwe6m4jft8g20czh9kp5p4mfhqn8uf7cua3zh454p6uzc4z8td"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
@@ -232,7 +244,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo127hk2t
 
 
 ```
-{"jsonrpc":"2.0","result":[{"address":"ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw","amount":"0x20","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"","outindex":"0x0","spendable":true,"txid":"0xda7d…b29e"}],"id":1}
+{"jsonrpc":"2.0","result":[{"address":"ogo1td987xe2lmhez8juecmnlk4mxfwe6m4jft8g20czh9kp5p4mfhqn8uf7cua3zh454p6uzc4z8td","amount":"0x174876e800","change":false,"confirmations":"0x0","jsindex":"0x0","jsoutindex":"0x0","memo":"test","outindex":"0x0","spendable":true,"txid":"0x348c…89cf"}],"id":1}
 ```
 
 
@@ -243,23 +255,24 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listUnspent","params":["ogo127hk2t
 
 **origo_sendMany**
 
-Send multiple private transactions. Amounts are decimal numbers with at most 8 digits of precision.while change generated from private address returns to itself.
+Transfer value from private address to private address. while change generated from private address returns to itself.
 
 
 #### **Parameters**
 
 
 
-1. fromaddress: String - the private address to send the funds from
+1. from: String - the from private address to transfer balance.
 2. Amounts: Array - An array of json objects representing the amounts to send.
-    *   address: String - the private address to send
-    *   Amount: Quantity - The value to send to the address
-    *   Memo: String - raw data represented in hexadecimal string format
-3. miniconf: Quantity - (optional) default = 0, Only use funds confirmed at least this many times.
-4. fee: Quantity - (optional), default=0, The fee amount to attach to this transaction
+    *   address: String - the private address to send.
+    *   Amount: Quantity - The value to send to the address，it should be multiple of 10^9.
+    *   Memo: String - raw data represented in hexadecimal string format.
+3. password: String - The passord is used to decrypt the from private address in the node's wallet.
+4. miniconf: Quantity - (optional) default = 0, Only use funds confirmed at least this many times.
+5. gas: Quantity - (optional), default=21000, The gas limit of the transaction.
+6. gasPrice: Quantity - (optional), default=1, The gas price of the transaction.
 
 **Returns**
-
 
 
 1. Data - 32 Bytes - the transaction hash, or the zero hash if the transaction is not yet available
@@ -270,7 +283,7 @@ Send multiple private transactions. Amounts are decimal numbers with at most 8 d
 
 
 ```
-curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo127hk2tmx3pktg0pvdskrtjal5yt9en5zn67vm3tuxau5v5vvvl8p34phy0n4znfq7h4f5n6l2yw", [{"address":"ogo1gs2uw342alp7z49xgm2a4hshj53cwnl4ml0ardxqe8ewtl3ynut2dhq6f0n2rzf7rglv7jeksxe", "amount": 32, "memo":"test" }], 5, 12],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
+ curl --data '{"jsonrpc":"2.0","method":"origo_sendMany", "params":["ogo1mj73lnwek33kppywv520yfnt58thshan8rfacfpum6hcr2ftwt4kn50kdmlm5r3js3pcvcmtxp8", [{"address":"ogo1fklhxyhg0c20yaqkfkwyf2khtn7e3nme97y28nhlvdexcvzqytzhtuz46admr44vas99wpqjfqt", "amount":"0xba43b7400", "memo":"test" }], "password"],"id":1}' -H "Content-Type: application/json" -X POST localhost:6622
 ```
 
 
