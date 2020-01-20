@@ -77,13 +77,13 @@ If you want to mining "ogo" with your own miner, you can get the detail here, We
 ### Pow
 The input of Equihash is 64 bytes hash of block header, keccak512 is the hash algorithm, so the input is 
 ```
-pow_hash = keccak512(block_header)
+ pow_hash = keccak512(block_header)
 ```
 when the miner find a `solution` of Equihash, the proof of work will be checked as follow
 ```
 sha256 ( sha256 ( pow_hash + nonce + solution_prefix + solution ) ) <= target
 ```
-the solution_prefix is the compact size of solution, for (192, 7) the solution size is 400, so the solution_prefix is 0xfd9001, the target is calculate from current difficulty. if the check have been passed that the solution meet the difficulty requirement and the block have been mined.
+the solution_prefix is the compact size of solution, for (192, 7) the solution size is `400`, so the solution_prefix is `0xfd9001`, the target is calculate from current difficulty. if the check have been passed that the solution meet the difficulty requirement and the block have been mined.
 ### interface of mining
 The miner can get work from Origo node by stratum protocol，follow is describe of the protocol
 #### stratum
@@ -116,4 +116,4 @@ response of success
  {"result":true,"id":y}  
 ```
 
-if you have any question about the mining of Origo, you can contact with us.
+If you have any question about the mining of Origo, you can contact with us.
