@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 from optparse import OptionParser
 import sys
@@ -106,8 +106,8 @@ class StratumClientProtocol(asyncio.Protocol):
         self.transport = transport
         verbose('Successfully connected to %s:%s' %
                 (self.sa.host, self.sa.port))
-        self.do_send(self.sa.stratum_msg('mining.subscribe'))
-        self.sa.st_state = 'SENT_SUBSCRIBE'
+        self.do_send(self.sa.stratum_msg('mining.authorize'))
+        self.sa.st_state = 'SENT_AUTHORIZE'
 
     def data_received(self, data):
         very_verbose('From stratum server: %s' % (repr(data)))
@@ -281,8 +281,10 @@ class ogominer:
         if self.opts.do_list:
             self.list_devices()
         self.init()
+        #my_ensure_future(self.start_notify_server())
         my_ensure_future(self.reconnect())
-        #my_ensure_future(self.show_stats())
+        my_ensure_future(self.show_stats())
+        print('\nRun ', self.opts.use)
         for gpuid in self.opts.use:
             for instid in range(self.opts.instances):
                 devid = "%d.%d" % (gpuid, instid)
@@ -304,6 +306,35 @@ class ogominer:
         print('Solver %s: exit status %d' % (devid, proc.returncode))
         if devid in self.solver_procs:
             del self.solver_procs[devid]
+
+    @asyncio.coroutine
+    def handle_notify(self, reader, writer):
+        verbose('handle notify')
+        while True:
+            data = yield from reader.read(8192)
+            if not data:
+                print('read data error')
+                continue
+            try:
+                msg = data.decode()
+                verbose('recv notify data: %s' % msg)
+                i = msg.find('{')
+                msg = json.loads(msg[i:])['result']
+                pow_hash = msg[0]
+                target = msg[1]
+                number = msg[2]
+                verbose('recv notify data: %s %s %s' % (pow_hash, target, number))
+            except Exception as e:
+                print("notify data error: %s" % e)
+            
+    
+    @asyncio.coroutine
+    def start_notify_server(self):
+        verbose('start notify server')
+        try:
+            yield from asyncio.start_server(self.handle_notify, '127.0.0.1', 6000)
+        except Exception as e:
+            fatal("Failed to start notify server %s" % e)
 
     @asyncio.coroutine
     def start_solvers(self, devid):
@@ -388,6 +419,7 @@ class ogominer:
             return
         if self.origo_nonceless_header is None:
             return
+        
         for gpuid in self.opts.use:
             for instid in range(self.opts.instances):
                 devid = "%d.%d" % (gpuid, instid)
@@ -423,25 +455,34 @@ class ogominer:
                     'fixing the first %d bytes of the nonce' % l)
 
     def set_target(self, t):
-        verbose('Received target %s' % t)
-        if not re.match(r'^[0-9a-fA-F]{64}$', t):
-            raise Exception('Invalid target: %s' % t)
-        is_first_target = self.target is None
-        # store it in internal byte order
-        self.target = bytes.fromhex(t)[::-1]
+        verbose('Received target %s' % t[2:])
+        if not re.match(r'^[0-9a-fA-F]{64}$', t[2:]):
+            raise Exception('Invalid target: %s' % t[2:])
+        #is_first_target = self.target is None
+
+        # store it in internal byte order            
+        self.target = bytes.fromhex(t[2:])[::-1]
+
         # take the target into account *immediately* only if it is the first
         # ever received, or else the target applies to the next job
-        if is_first_target:
-            self.update_mining_job()
+        #if is_first_target:
+        #   self.update_mining_job()
 
     def set_new_job(self, job_id, hash_bare_block):
         verbose('Received job "%s"' % job_id)
+
+        if not re.match(r'^[0-9a-fA-F]{128}$', hash_bare_block[2:]):
+            raise Exception('Invalid hash_bare_block: %s' % hash_bare_block)
+        pow_hash = bytes.fromhex(hash_bare_block[2:])
+        if self.st_state == 'MINING':
+            if self.origo_nonceless_header == pow_hash or int(self.job_id, 16) > int(job_id[2:], 16):
+                verbose('drop job "%s"' % hash_bare_block[2:])
+                return False
+
         self.job_id = job_id[2:]
         self.st_state = 'MINING'
-        
-        if not re.match(r'^[0-9a-fA-F]{128}$', hash_bare_block[2:]):
-            raise Exception('Invalid hash_bare_block: %s' % hash_bare_block)            
-        self.origo_nonceless_header = bytes.fromhex(hash_bare_block[2:])
+        self.origo_nonceless_header = pow_hash
+        return True
         
     def stratum_next_id(self):
         self.st_id += 1
@@ -451,7 +492,7 @@ class ogominer:
     def stratum_msg(self, method, *args):
         '''Generate a stratum message to call the specified method.'''
         if method == 'mining.subscribe':
-            p = ["ogominer", None, self.host, str(self.port)]
+            p = [self.opts.user, None, self.host, str(self.port)]
         elif method == 'mining.extranonce.subscribe':
             p = []
         elif method == 'mining.authorize':
@@ -491,20 +532,22 @@ class ogominer:
                     # a response for
                     very_verbose("Stratum server returned wrong id: %s %s" % \
                             (msg['id'], msg))
-                    self.subscribe_new_work()
-                    return
-                    # attempt to proceed and ignore this error
+                    #self.subscribe_new_work()
+                    #return
+                    # attempt to proceed and ignore this error, maybe stratum server is busy for response or packet lost
+                    self.st_id = msg['id']
                 self.st_expected_id = None
-                if self.st_state == 'SENT_SUBSCRIBE':
-                    # result: [ <ignored>, nonce_leftpart ]
+                if self.st_state == 'SENT_SUBSCRIBE' or self.st_state == 'MINING':
+                    # result: ['pow_hash', 'target', 'blocknumber' ]
                     # -+-+ jump to work
                     verbose('---- recv subscribe response')
                     self.nonce_leftpart = bytes.fromhex('00')
                     self.st_extranonce = True
                     #self.st_accepted += 1
-                    self.set_target(msg['result'][2][2:])
-                    self.set_new_job(msg['result'][3], msg['result'][1])
-                    self.update_mining_job()
+                    #update mining only it is a new job
+                    if self.set_new_job(msg['result'][3], msg['result'][1]):
+                        self.set_target(msg['result'][2])
+                        self.update_mining_job()
                     return
                     # -+-+ 
                     if self.st_extranonce:
@@ -521,8 +564,9 @@ class ogominer:
                     # result: succeeded
                     if not msg['result']:
                         raise Exception('mining.authorize failed')
-                    self.st_state = 'AUTHORIZED'
-                    self.update_mining_job()
+                    self.st_state = 'SENT_SUBSCRIBE'
+                    return self.stratum_msg('mining.subscribe')
+                    return
                 elif self.st_state == 'AUTHORIZED':
                     # result: succeeded
                     very_verbose("Stratum server accepted a share")
@@ -540,10 +584,11 @@ class ogominer:
                     # params: [ nonce_leftpart ]
                     self.set_nonce_leftpart(msg['params'][0])
                 elif msg['method'] == 'mining.notify':
-                    # params: [ job_id, nVersion, hashPrevBlock, hashMerkleRoot,
-                    #   hashReserved, nTime, nBits, clean_jobs ]
-                    self.set_new_job(*msg['params'][:8])
-                    self.update_mining_job()
+                    # params: [pow_hash', 'target', 'blocknumber' ]
+                    verbose('---- recv mining.notify')
+                    if self.set_new_job(msg['params'][3], msg['params'][1]):
+                        self.set_target(msg['params'][2])
+                        self.update_mining_job()
                 elif msg['method'] == 'client.reconnect':
                     print("Stratum server forcing a reconnection")
                     self.st_transport.close()
@@ -594,7 +639,7 @@ def main():
     parser.add_option(
             "-u", "--user",
             dest="user", action="store", type="string", metavar="USER",
-            default="t1cVviFvgJinQ4w3C2m2CfRxgP5DnHYaoFC",
+            default="ogominer",
             help="username for connecting to the pool")
     parser.add_option(
             "-p", "--pwd",
