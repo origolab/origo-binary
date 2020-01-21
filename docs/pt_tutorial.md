@@ -6,45 +6,45 @@ This document will guide you through executing your first private transaction on
 
 In this example,  you need to download the Origo blockchain binary and execute the origo private transaction between two users: A and B.
 
-Perform the following steps to submit a private transaction to the full node on the Origo testnet.
+Perform the following steps to submit a private transaction to the full node on the Origo network.
 
 
 
-1. **Setup the Origo blockchain testnet**
-2. **Verify the public address for user A**
+1. **Setup the Origo blockchain network**
+2. **Create the public address for user A**
 3. **Create the private address for user A and user B**
 4. **Submit shield transaction from A’s public address to A’s private address**
 5. **Submit private transaction from A’s private address to B’s private address**
 
-**Setup Origo Blockchain Testnet**
+**Setup Origo Blockchain network**
 
 **Step 1: Download the Origo blockchain binary**
 
 Download the Origo Blockchain Binary from [releases](https://github.com/origolab/origo-binary/releases), please choose right version for your operating system.
 
-**Step 2: Connecting to Medietas testnet**
+**Step 2: Connecting to Medietas mainnet**
 
-To start the testnet,  change to the binary directory and run the command as below:
-
-
-```
-./origo --chain=medietas-testnet --jsonrpc-apis=all
-```
-
-
-**Verify the public address for user A**
-
-In the develop mode we have a preloaded public address **0x00a329c0648769a73afac7f9381e08fb43dbea72** holds enough origo for testing. Its password is empty string. We run the unlock command to verify we have access to it:
-
-```
-curl --data '{"method":"personal_unlockAccount","params":["0x00a329c0648769a73afac7f9381e08fb43dbea72","",null],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
-```
-
-It should return a success result like this:
+To start the mainnet,  change to the binary directory and run the command as below:
 
 
 ```
-{"jsonrpc":"2.0","result":true,"id":1}
+./origo  --jsonrpc-apis=all
+```
+
+
+**Create the public address for user A**
+
+We use the following command to create a public address for user A and set a password:
+
+```
+curl --data '{"method":"personal_newAccount","params":["password"],"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
+```
+
+It should return an address like this:
+
+
+```
+{"jsonrpc":"2.0","result":"0x00a329c0648769a73afac7f9381e08fb43dbea72","id":1}
 ```
 
 
@@ -114,7 +114,7 @@ curl --data '{"jsonrpc":"2.0","method":"origo_listAddresses","id":1}' -H "Conten
 
 To send balance from A’s public address to A’s private address, the command as below:
 
-_Note: Please **replace the address ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6** to A’s private address.
+_Note: Please **replace the address 0x00a329c0648769a73afac7f9381e08fb43dbea72 to A's public address, and replace the address ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6** to A’s private address.
 
 ```
 curl --data '{"method":"personal_sendShieldTransaction","params":[{ "from":"0x00a329c0648769a73afac7f9381e08fb43dbea72","gas": "0x76c00", "gasPrice": "0x9184e72a000", "value": "0x174876e800", "shieldAmounts": [{"address":"ogo180m058urhazk8j98zvz9fsq5zd0vd9dpsc8c6ednwd2xkc3l8z9thmxsezepzx4aascp6nrlkd6","amount": "0x174876e800", "memo":"test" }] }, ""] ,"id":1,"jsonrpc":"2.0"}' -H "Content-Type: application/json" -X POST localhost:6622
